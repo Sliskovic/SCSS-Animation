@@ -1,0 +1,44 @@
+@mixin flex-container {
+  align-items: center;
+  display: flex;
+  height: 100vh;
+  justify-content: space-around;
+  width: 100vw;
+  
+  @include respond-to('xs'){
+    flex-wrap: wrap;
+  }
+}
+
+@mixin keyframes($animation-name) {
+  @keyframes #{$animation-name} {
+    @content;
+  }
+}
+
+@mixin animation($str) {
+  animation: #{$str};
+}
+
+/// Breakpoints map
+/// @prop {String} keys - Keys are identifires mapped to a given length
+/// @prop {Map} values - Values are actual breakpoints expressed in pixels
+$breakpoints: (
+    'xs': 576px,
+    'sm': 768px,
+    'md': 991px,
+    'lg': 1200px
+) !default;
+
+/*########  MIXINS ##########*/
+@mixin respond-to($breakpoint) {
+    @if map-has-key($breakpoints, $breakpoint) {
+        @media screen and (max-width: map-get($breakpoints, $breakpoint)){
+            @content;
+        }
+    }
+    @else {
+        @error "No value could be retrived from `#{$breakpoint}`. "
+                + "Available breakpoints are: `#{map-keys($breakpoints)}`";
+    }
+}
